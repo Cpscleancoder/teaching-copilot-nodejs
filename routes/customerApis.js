@@ -32,6 +32,7 @@ router.post('/signup', async (req, res) => {
 
 // Admin Login
 router.post('/signin', (req, res) => {
+  console.log(req, 'hellow')
   Registeration.findOne({
     email: req.body.email,
     password: req.body.password,
