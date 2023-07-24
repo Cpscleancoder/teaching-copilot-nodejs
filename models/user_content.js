@@ -4,7 +4,7 @@ const user_content= new mongoose.Schema({
     user_id:{
         type:String || Number,
         required:[true]
-    }, 
+    },
     description:{
         type: String,
         required:[false]
@@ -13,11 +13,10 @@ const user_content= new mongoose.Schema({
         type: String,
         required:[false]
     }, 
-     created_at:{
+    created_at:{
         type : Date, 
         default: Date.now,
         required:[false]
     }, 
-    
 })
 module.exports= mongoose.model("user_content", user_content)

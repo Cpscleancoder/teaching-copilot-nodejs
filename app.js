@@ -3,12 +3,10 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-mongoose.set("strictQuery", false);
-// const uri = "mongodb+srv://hikmat:<password>@atlascluster.ve153xf.mongodb.net/?retryWrites=true&w=majority";
-// mongodb+srv://hikmat:Hikmat@vm123@atlascluster.ve153xf.mongodb.net/VM-ask-ai?retryWrites=true&w=majority
-     mongoose.connect("mongodb+srv://hikmat:dyc3ZZqDQDMl9M7L@atlascluster.ve153xf.mongodb.net/VM-ask-ai?retryWrites=true&w=majority", { useNewUrlParser: true,
-         useUnifiedTopology: true,
-     })  
+mongoose.set("strictQuery", false); 
+        mongoose.connect("mongodb+srv://hikmatullahcps:o24N2WWAOtIEdAWy@cluster0.cjuwicv.mongodb.net/Copilot?retryWrites=true&w=majority", { useNewUrlParser: true,
+        useUnifiedTopology: true,
+        }) 
     const db = mongoose.connection
     db.on('error', (error) => console.error("error"))
     db.once('open', () => console.log('Connected to Database'))

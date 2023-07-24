@@ -2,150 +2,11 @@ const express = require('express')
 const router = express.Router()
 const alcohlicPerfume = require('../models/alcohlicPerfume')
 const user_content = require('../models/user_content')
-const trackcredits = require('../models/trackcredits')
 const Accounts = require('../models/Accounts')
 const RegisterUsers = require('../models/Registeration')
-const uploadImg = require('../src/uploader') 
+const uploadImg = require('../src/uploader')
 const path = require('path')
-const axios = require('axios');
-const { Configuration, OpenAIApi } = require("openai");
- // all none alcohlic perfume
-// router.post('/call-chatgpt-api', async (req, res) => { 
-//  console.log(req.body.prompt, 'req')
-// const configuration = new Configuration({ apiKey: "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" });
-// const openai = new OpenAIApi(configuration); 
-  
-//   const prompt = req.body.prompt; 
-//   const messages = [
-//     { role: 'system', content: 'You: ' + prompt },
-//     { role: 'user', content: prompt }
-//   ];
-
-//   try {
-//     const response = await openai.createChatCompletion({ 
-//       model: 'gpt-3.5-turbo',
-//       messages:messages,
-//     });
-
-//     const botMessage = response.data.choices[0].message.content;
-
-//     res.status(200).json({ content: botMessage });
-//   } catch (error) {
-//     console.error('Error:', error.message);
-//     res.status(500).json({ error: error.message+' An error occurred while calling the OpenAI API.' });
-//   }
-// })
-
- 
-
- 
-const API_KEY = "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";
-const API_URL = "https://api.openai.com/v1/chat/completions";
-
-router.post('/call-chatgpt-api', async (req, res) => {
-  const prompt = req.body.prompt;
-  const messages = [
-    // { role: 'system', content: 'You: ' + prompt },
-    { role: 'user', content: prompt }
-  ];
-
-  const requestData = {
-    model: 'gpt-3.5-turbo',
-    messages: messages,
-  };
-
-  try {
-    const botMessage = await makeChatCompletionRequest(requestData);
-    res.status(200).json({ content: botMessage });
-  } catch (error) {
-    console.error('Error:', error.message);
-    res.status(500).json({ error: 'An error occurred while calling the OpenAI API.' });
-  }
-});
-
-async function makeChatCompletionRequest(requestData, numRetries = 3, retryDelay = 9000) {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${API_KEY}`
-    }
-  };
-
-  for (let i = 0; i < numRetries; i++) {
-    try {
-      const response = await axios.post(API_URL, requestData, config);
-      return response.data.choices[0].message.content;
-    } catch (error) {
-      if (error.response && error.response.status === 429) {
-        console.log('Rate limit exceeded. Retrying after delay...');
-        await delay(retryDelay);
-        retryDelay *= 2; // Exponential backoff
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  throw new Error('Exceeded maximum number of retries');
-}
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// all none alcohlic perfume
-router.get('/frequent-ask-qs', async (req, res) => {
-  try {
-    const faq = [
-      {
-        question: "What is Play AI?",
-        answer: "Play AI refers to the application of artificial intelligence technology in creating conversational agents or virtual assistants that can engage in human-like conversations with users."
-      },
-      {
-        question: "Is the Play AI App Free?",
-        answer: "You'll get only 10 free prompts. If you want more, you can upgrade Play AI to the PRO version."
-      },
-      {
-        question: "How can I log out from Play AI?",
-        answer: "To log out from Play AI, please follow the steps: Account => Logout => Yes, Logout."
-      },
-      {
-        question: "Is my personal information safe when using the Play AI App?",
-        answer: "Play AI Apps prioritize user privacy and security. They adhere to strict data protection protocols and handle personal information responsibly."
-      },
-      {
-        question: "Can Play AI understand multiple languages?",
-        answer: "Play AI supports major languages such as Hindi, French, Spanish, German, Bengali, and Indonesian. It has the capability to understand and respond in different languages."
-      },
-      {
-        question: "Is Play AI available offline?",
-        answer: "No, Play AI is available online only."
-      },
-      {
-        question: "Is Play AI only for text-based conversations?",
-        answer: "Yes, Play AI supports text-based conversations and offers voice recognition, allowing users to interact through spoken language."
-      },
-      {
-        question: "Is Play AI able to recognize images or provide visual search functionality?",
-        answer: "No, for now, our primary focus is on text-based interactions and voice recognition."
-      },
-      {
-        question: "Is Play AI capable of understanding user emotions?",
-        answer: "Yes, Advanced Play AI can utilize sentiment analysis techniques to understand and respond to user emotions to some extent."
-      },
-      {
-        question: "Can Play AI provide educational content or answer academic questions?",
-        answer: "If the user uses a prompt, then yes. If it means a special category, then no. But in the future, we'll provide educational content and answer academic questions by leveraging vast knowledge databases."
-      }
-    ];
-    
-    res.status(200).json({faq:faq})
-  } catch (err) {
-    res.status(500).json({ message: err.message })
-  }
-})
-
-
+const trackcredits = require('../models/trackcredits')
 // all none alcohlic perfume
 router.get('/user_content', async (req, res) => {
   try {
@@ -168,6 +29,8 @@ router.post('/user_content', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+
 // Creating one
 router.post('/user_content_save', async (req, res) => {
   const user_content_save = new user_content({
@@ -178,7 +41,7 @@ router.post('/user_content_save', async (req, res) => {
   })
   try {
     const user_content = await user_content_save.save()
-    res.status(201).json({ message: 'successfuly created', error: false })
+    res.status(200).json({ message: 'successfuly created ',user_content:user_content, error: false })
   } catch (err) {
     res.status(400).json({ message: err.message })
   }
@@ -186,12 +49,12 @@ router.post('/user_content_save', async (req, res) => {
  
 // Deleting One
 router.delete(
-  '/user_content_deleted',
-  removeUserContent,
+  '/user_content_deleted/:user_id',
+  removeuser_content,
   async (req, res) => {
     try {
-      await res.noneAlcoholic.remove()
-      res.json({ message: 'Deleted record' })
+      await res.noneAlochlic.remove()
+      res.status(200).json({ message: 'Deleted record' })
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
@@ -261,22 +124,22 @@ async function alcohlicMiddleFunc(req, res, next) {
   next()
 }
  
-async function removeUserContent(req, res, next) {
+async function removeuser_content(req, res, next) {
+  let noneAlochlic
   try {
-    const noneAlcoholic = await user_content.findByIdAndRemove(req.query.history_id)
-    if (noneAlcoholic == null) {
+    noneAlochlic = await user_content.findById(req.params.user_id)
+    if (noneAlochlic == null) {
       return res.status(404).json({ message: 'Cannot find record' })
-    }
-    res.noneAlcoholic = noneAlcoholic
-    next()
+    } 
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    return res.status(500).json({ message: err.message })
   }
+
+  res.noneAlochlic = noneAlochlic
+  next()
 }
 
 
-// track user free credits 
- 
 // Create track credits
 router.post('/track_user_free_credits', async (req, res) => {
   try {
@@ -287,7 +150,13 @@ router.post('/track_user_free_credits', async (req, res) => {
     });
 
     const user_content = await u.save();
-    res.status(201).json({ message: 'Successfully created', error: false });
+     if (user_content) {
+        res.status(200).json({ message: 'Successfully created ',user_content:user_content, error: false });
+  } else {
+        res.status(200).json({ message: 'not saved for some reason ',user_content:user_content, error: true });
+  }
+
+    
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -346,5 +215,5 @@ router.get('/track_user_free_credits/:user_id', async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
- 
+
 module.exports = router
