@@ -142,6 +142,9 @@ async function removeuser_content(req, res, next) {
 
 // Create track credits
 router.post('/track_user_free_credits', async (req, res) => {
+  console.log ({ user_id: req.body.user_id,
+      trackcredits: req.body.trackfreecredits,
+      created_at: new Date()}, 'track user free')
   try {
     const u = new trackcredits({
       user_id: req.body.user_id,
